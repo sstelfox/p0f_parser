@@ -1,5 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "host",
+  "description": "A record representing the data known about an individual host",
   "properties": {
     "addresses": {
       "items": {
@@ -12,13 +14,15 @@
             ]
           },
           "hostnames": {
-            "type":"array",
+            "description": "A list of all hostnames discovered associated directly with this address",
             "items": {
               "format": "host-name",
               "type": "string"
-            }
+            },
+            "type":"array"
           },
           "type": {
+            "description": "The kind of the network address being represented.",
             "enum": [ "ipv4", "ipv6", "mac" ],
             "type":"string"
           }
