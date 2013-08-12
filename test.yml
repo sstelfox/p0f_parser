@@ -26,11 +26,11 @@ seen_by:
   - first_seen: 2013-08-12T00:29:50-04:00
     last_seen: 2013-08-12T00:29:50-04:00
     scanner: p0f
-    scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
+    sensor: 2ca0815d-eb30-4e95-ab64-200e95de973e
   - first_seen: 2013-08-12T00:29:50-04:00
     last_seen: 2013-08-12T00:29:50-04:00
     scanner: nmap
-    scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
+    sensor: 2ca0815d-eb30-4e95-ab64-200e95de973e
 services:
   - metadata:
       ssh_hostkey: 1024 b8:c2:d5:0d:5b:77:bd:e0:77:b6:09:c1:da:1f:45:86 (DSA)\n1040 78:4d:80:50:e4:17:5e:3f:2b:f0:42:9a:fe:f6:c4:4d (RSA)

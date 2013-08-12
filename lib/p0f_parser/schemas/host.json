@@ -33,25 +33,36 @@
       "type": "array",
       "uniqueItems": true
     },
-    "metadata": { "type": "object" },
+    "metadata": {
+      "description": "Additional information about this host provided by scanner's that is outside the normal scope of a host record.",
+      "type": "object"
+    },
     "id": {
       "description": "A unique identifier for an individual host.",
       "type": "number"
     },
     "seen_by": {
+      "description": "A list of sensor/scanner tuples that have witnessed this host's existance and have provided information about the host",
       "properties": {
         "items": {
+          "description": "A record identifying an individual scanner that has seen this host and what sensor the service was running on.",
           "properties": {
             "first_seen": {
+              "description": "The first time this sensor/scanner combination saw this host",
               "format": "date-time",
               "type": "string"
             },
             "last_seen": {
+              "description": "The last time this sensor/scanner combination saw this host",
               "format": "date-time",
               "type": "string"
             },
-            "scanner": { "type": "string" },
-            "scan_host": {
+            "scanner": {
+              "description": "The program on the sensor that 'caught' this host, for example nmap or p0f",
+              "type": "string"
+            },
+            "sensor": {
+              "description": "UUID of the sensor the scanner was running on when this host was detected.",
               "pattern": "^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
               "type": "string"
             }
