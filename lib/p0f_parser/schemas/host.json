@@ -1,66 +1,30 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-03/schema#",
   "properties": {
     "addresses": {
       "items": {
-        "oneOf": [
-          {
-            "properties": {
-              "address": {
-                "format": "ip-address",
-                "type":"string"
-              },
-              "hostnames": {
-                "type":"array",
-                "items": {
-                  "format": "host-name",
-                  "type": "string"
-                }
-              },
-              "type": {
-                "enum": [ "ipv4" ],
-                "type":"string"
-              }
-            },
-            "required": [ "address", "hostnames", "type" ],
-            "type": "object"
+        "properties": {
+          "address": {
+            "oneOf": [
+              { "format": "ip-address", "type":"string" },
+              { "format": "ipv6", "type":"string" },
+              { "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$", "type":"string" }
+            ]
           },
-          {
-            "properties": {
-              "address": {
-                "format": "ipv6",
-                "type":"string"
-              },
-              "hostnames": {
-                "type":"array",
-                "items": {
-                  "format": "host-name",
-                  "type": "string"
-                }
-              },
-              "type": {
-                "enum": [ "ipv6" ],
-                "type":"string"
-              }
-            },
-            "required": [ "address", "hostnames", "type" ],
-            "type": "object"
+          "hostnames": {
+            "type":"array",
+            "items": {
+              "format": "host-name",
+              "type": "string"
+            }
           },
-          {
-            "properties": {
-              "address": {
-                "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
-                "type":"string"
-              },
-              "type": {
-                "enum": [ "mac" ],
-                "type":"string"
-              }
-            },
-            "required": [ "address", "type" ],
-            "type": "object"
+          "type": {
+            "enum": [ "ipv4", "ipv6", "mac" ],
+            "type":"string"
           }
-        ]
+        },
+        "required": [ "address", "type" ],
+        "type": "object"
       },
       "type": "array",
       "uniqueItems": true

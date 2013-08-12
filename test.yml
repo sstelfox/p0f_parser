@@ -23,12 +23,12 @@ metadata:
     lastboot: Sat Jul 20 16:26:52 2013
     seconds: 1928757
 seen_by:
-  - first_seen: Mon Aug 12 00:29:50 2013
-    last_seen: Mon Aug 12 00:29:50 2013
+  - first_seen: 2013-08-12T00:29:50-04:00
+    last_seen: 2013-08-12T00:29:50-04:00
     scanner: p0f
     scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
-  - first_seen: Mon Aug 12 00:29:50 2013
-    last_seen: Mon Aug 12 00:29:50 2013
+  - first_seen: 2013-08-12T00:29:50-04:00
+    last_seen: 2013-08-12T00:29:50-04:00
     scanner: nmap
     scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
 services:
