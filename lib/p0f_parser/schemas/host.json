@@ -36,22 +36,27 @@
     },
     "seen_by": {
       "properties": {
-        "first_seen": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "last_seen": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "scanner": { "type": "string" },
-        "scan_host": {
-          "pattern": "^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
-          "type": "string"
+        "items": {
+          "properties": {
+            "first_seen": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "last_seen": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "scanner": { "type": "string" },
+            "scan_host": {
+              "pattern": "^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
+              "type": "string"
+            }
+          },
+          "required": [ "first_seen", "last_seen", "scanner", "scan_host" ],
+          "type": "object"
         }
       },
-      "required": [ "first_seen", "last_seen", "scanner", "scan_host" ],
-      "type": "object"
+      "type": "array"
     },
     "services": {
       "items": {
