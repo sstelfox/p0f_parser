@@ -1,0 +1,11 @@
+---
+type: host
+id: 21234
+addresses:
+  - address: 11:22:33:44:55:66
+    type: mac
+seen_by:
+  - first_seen: 2013-08-12T00:29:50-04:00
+    last_seen: 2013-08-12T00:29:50-04:00
+    scanner: p0f
+    sensor: 2ca0815d-eb30-4e95-ab64-200e95de973e
