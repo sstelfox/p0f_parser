@@ -1,0 +1,52 @@
+---
+type: host
+id: 21234
+addresses:
+  - address: 127.0.0.1
+    type: ipv4
+    hostnames:
+      - p.example.org
+      - o.example.org
+  - address: ::1
+    type: ipv6
+    hostnames:
+      - p.example.org
+  - address: 11:22:33:44:55:66
+    type: mac
+metadata:
+  trace:
+    - host: gw.example.org
+      ipaddr: 10.0.0.1
+      rtt: 1.54
+      ttl: 1
+  uptime:
+    lastboot: Sat Jul 20 16:26:52 2013
+    seconds: 1928757
+seen_by:
+  - first_seen: Mon Aug 12 00:29:50 2013
+    last_seen: Mon Aug 12 00:29:50 2013
+    scanner: p0f
+    scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
+  - first_seen: Mon Aug 12 00:29:50 2013
+    last_seen: Mon Aug 12 00:29:50 2013
+    scanner: nmap
+    scan_host: 2ca0815d-eb30-4e95-ab64-200e95de973e
+services:
+  - metadata:
+      ssh_hostkey: 1024 b8:c2:d5:0d:5b:77:bd:e0:77:b6:09:c1:da:1f:45:86 (DSA)\n1040 78:4d:80:50:e4:17:5e:3f:2b:f0:42:9a:fe:f6:c4:4d (RSA)
+      product: Dropbear sshd
+      service_name: ssh
+      version: 2011.54
+    port: 22
+    protocol: tcp
+    status: open
+    vulnerabilities:
+      - cve: CVE-2013-2113
+        cvss:
+          base_score: 6.0
+          exploitability: 6.8
+          impact: 6.4
+          link: http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-2113
+          vectors: AV:N/AC:M/Au:S/C:P/I:P/A:P
+        exploitdb: nil
+        metasploit_module: nil
