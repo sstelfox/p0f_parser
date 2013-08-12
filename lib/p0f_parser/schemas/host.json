@@ -1,98 +1,80 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "definitions": {
-    "host": {
-      "id": "host",
-      "properties": {
-        "addresses": {
-          "items": {
-            "oneOf": [
-              { "$ref": "#ipv4Address" },
-              { "$ref": "#ipv6Address" },
-              { "$ref": "#macAddress" }
-            ]
+  "id": "host",
+  "properties": {
+    "addresses": {
+      "items": {
+        "oneOf": [
+          {
+            "id": "ipv4Address",
+            "properties": {
+              "address": {
+                "format": "ip-address",
+                "type":"string"
+              },
+              "hostnames": {
+                "type":"array",
+                "items": {
+                  "format": "host-name",
+                  "type": "string"
+                }
+              },
+              "type": {
+                "enum": [ "ipv4" ],
+                "type":"string"
+              }
+            },
+            "required": [ "address", "hostnames", "type" ],
+            "type": "object"
           },
-          "type": "array",
-          "uniqueItems": true
-        },
-        "metadata": { "type": "object" },
-        "id": {
-          "description": "A unique identifier for identifying an individual host.",
-          "type": "number"
-        },
-        "seen_by": { "$ref": "#scanner" },
-        "services": {
-          "items": { "$ref": "#service" },
-          "type": "array",
-          "uniqueItems": true
-        },
-        "type": {
-          "type": "string",
-          "enum": [ "host" ]
-        }
+          {
+            "id": "ipv6Address",
+            "properties": {
+              "address": {
+                "format": "ipv6",
+                "type":"string"
+              },
+              "hostnames": {
+                "type":"array",
+                "items": {
+                  "format": "host-name",
+                  "type": "string"
+                }
+              },
+              "type": {
+                "enum": [ "ipv6" ],
+                "type":"string"
+              }
+            },
+            "required": [ "address", "hostnames", "type" ],
+            "type": "object"
+          },
+          {
+            "id": "macAddress",
+            "properties": {
+              "address": {
+                "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
+                "type":"string"
+              },
+              "type": {
+                "enum": [ "mac" ],
+                "type":"string"
+              }
+            },
+            "required": [ "address", "type" ],
+            "type": "object"
+          }
+        ]
       },
-      "required": [ "id", "type" ],
-      "type": "object"
+      "type": "array",
+      "uniqueItems": true
     },
-    "hostname": {
-      "id": "hostname",
-      "format": "host-name",
-      "type": "string"
+    "metadata": { "type": "object" },
+    "id": {
+      "description": "A unique identifier for an individual host.",
+      "type": "number"
     },
-    "ipv4Address": {
-      "id": "ipv4Address",
-      "properties": {
-        "address": {
-          "format": "ip-address",
-          "type":"string"
-        },
-        "hostnames": {
-          "type":"array",
-          "items": { "$ref": "hostname" }
-        },
-        "type": {
-          "enum": [ "ipv4" ],
-          "type":"string"
-        }
-      },
-      "required": [ "address", "hostnames", "type" ],
-      "type": "object"
-    },
-    "ipv6Address": {
-      "id": "ipv6Address",
-      "properties": {
-        "address": {
-          "format": "ipv6",
-          "type":"string"
-        },
-        "hostnames": {
-          "type":"array",
-          "items": { "$ref": "hostname" }
-        },
-        "type": {
-          "enum": [ "ipv6" ],
-          "type":"string"
-        }
-      },
-      "required": [ "address", "hostnames", "type" ],
-      "type": "object"
-    },
-    "macAddress": {
-      "id": "macAddress",
-      "properties": {
-        "address": {
-          "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
-          "type":"string"
-        },
-        "type": {
-          "enum": [ "mac" ],
-          "type":"string"
-        }
-      },
-      "required": [ "address", "type" ],
-      "type": "object"
-    },
-    "scanner": {
+    "seen_by": {
       "id": "scanner",
       "properties": {
         "first_seen": {
@@ -103,9 +85,7 @@
           "format": "date-time",
           "type": "string"
         },
-        "scanner": {
-          "type": "string"
-        },
+        "scanner": { "type": "string" },
         "scan_host": {
           "pattern": "^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
           "type": "string"
@@ -114,53 +94,55 @@
       "required": [ "first_seen", "last_seen", "scanner", "scan_host" ],
       "type": "object"
     },
-    "service": {
-      "id": "service",
-      "properties": {
-        "metadata": {
-          "type": "object"
+    "services": {
+      "items": {
+        "id": "service",
+        "properties": {
+          "metadata": { "type": "object" },
+          "port": { "type": "number" },
+          "protocol": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": [ "filtered", "open", "closed" ]
+          },
+          "vulnerabilities": {
+            "type": "array",
+            "items": {
+              "vulnerability": {
+                "id": "vulnerability",
+                "properties": {
+                  "cve": { "type": "string" },
+                  "cvss": {
+                    "id": "cvss",
+                    "properties": {
+                      "base_score": { "type": "number" },
+                      "exploitability": { "type": "number" },
+                      "impact": { "type": "number" },
+                      "link": { "type": "string", "format": "uri" },
+                      "vectors": { "type": "string" }
+                    },
+                    "type": "object",
+                    "required": [ "base_score", "exploitability", "impact", "link", "vectors" ]
+                  },
+                  "exploitdb": { "type": "number" },
+                  "metasploit_module": { "type": "string" }
+                },
+                "type": "object",
+              }
+            }
+          }
         },
-        "port": {
-          "type": "number"
-        },
-        "protocol": {
-          "type": "string",
-          "enum": [ "tcp", "udp", "icmp", "sctp" ]
-        },
-        "status": {
-          "type": "string",
-          "enum": [ "filtered", "open", "closed" ]
-        },
-        "vulnerabilities": {
-          "type": "array",
-          "items": { "$ref": "vulnerability" }
-        }
+        "type": "object",
+        "required": []
       },
-      "type": "object",
-      "required": []
+      "type": "array",
+      "uniqueItems": true
     },
-    "cvss": {
-      "id": "cvss",
-      "properties": {
-        "base_score": { "type": "number" },
-        "exploitability": { "type": "number" },
-        "impact": { "type": "number" },
-        "link": { "type": "string", "format": "uri" },
-        "vectors": { "type": "string" }
-      },
-      "type": "object",
-      "required": [ "base_score", "exploitability", "impact", "link", "vectors" ]
-    },
-    "vulnerability": {
-      "id": "vulnerability",
-      "properties": {
-        "cve": { "type": "string" },
-        "cvss": { "$ref": "cvss" },
-        "exploitdb": { "type": "number" },
-        "metasploit_module": { "type": "string" }
-      },
-      "type": "object",
-      "required": []
+    "type": {
+      "type": "string",
+      "enum": [ "host" ]
     }
-  }
+  },
+  "required": [ "id", "type" ],
+  "type": "object"
 }
