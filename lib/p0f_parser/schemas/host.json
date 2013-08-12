@@ -3,8 +3,6 @@
   "definitions": {
     "host": {
       "id": "host",
-      "required": [ "id", "type" ],
-      "type": "object",
       "properties": {
         "addresses": {
           "items": {
@@ -32,19 +30,20 @@
           "type": "string",
           "enum": [ "host" ]
         }
-      }
+      },
+      "required": [ "id", "type" ],
+      "type": "object"
     },
     "hostname": {
       "id": "hostname",
-      "type": "string",
-      "pattern": "^([a-zA-Z0-9-]{1,63}\.)*[a-zA-Z0-9-]{1,63}$"
+      "format": "host-name",
+      "type": "string"
     },
     "ipv4Address": {
       "id": "ipv4Address",
-      "type": "object",
       "properties": {
         "address": {
-          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+          "format": "ip-address",
           "type":"string"
         },
         "hostnames": {
@@ -55,14 +54,15 @@
           "enum": [ "ipv4" ],
           "type":"string"
         }
-      }
+      },
+      "required": [ "address", "hostnames", "type" ],
+      "type": "object"
     },
     "ipv6Address": {
       "id": "ipv6Address",
-      "type": "object",
       "properties": {
         "address": {
-          "pattern": "^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?$",
+          "format": "ipv6",
           "type":"string"
         },
         "hostnames": {
@@ -73,11 +73,12 @@
           "enum": [ "ipv6" ],
           "type":"string"
         }
-      }
+      },
+      "required": [ "address", "hostnames", "type" ],
+      "type": "object"
     },
     "macAddress": {
       "id": "macAddress",
-      "type": "object",
       "properties": {
         "address": {
           "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
@@ -87,19 +88,79 @@
           "enum": [ "mac" ],
           "type":"string"
         }
-      }
+      },
+      "required": [ "address", "type" ],
+      "type": "object"
     },
     "scanner": {
       "id": "scanner",
-      "type": "object",
       "properties": {
-      }
+        "first_seen": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "last_seen": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "scanner": {
+          "type": "string"
+        },
+        "scan_host": {
+          "pattern": "^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [ "first_seen", "last_seen", "scanner", "scan_host" ],
+      "type": "object"
     },
     "service": {
       "id": "service",
-      "type": "object",
       "properties": {
-      }
+        "metadata": {
+          "type": "object"
+        },
+        "port": {
+          "type": "number"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [ "tcp", "udp", "icmp", "sctp" ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [ "filtered", "open", "closed" ]
+        },
+        "vulnerabilities": {
+          "type": "array",
+          "items": { "$ref": "vulnerability" }
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "cvss": {
+      "id": "cvss",
+      "properties": {
+        "base_score": { "type": "number" },
+        "exploitability": { "type": "number" },
+        "impact": { "type": "number" },
+        "link": { "type": "string", "format": "uri" },
+        "vectors": { "type": "string" }
+      },
+      "type": "object",
+      "required": [ "base_score", "exploitability", "impact", "link", "vectors" ]
+    },
+    "vulnerability": {
+      "id": "vulnerability",
+      "properties": {
+        "cve": { "type": "string" },
+        "cvss": { "$ref": "cvss" },
+        "exploitdb": { "type": "number" },
+        "metasploit_module": { "type": "string" }
+      },
+      "type": "object",
+      "required": []
     }
   }
 }
