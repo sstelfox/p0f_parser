@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "host": {
+      "id": "host",
+      "required": [ "id", "type" ],
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "items": {
+            "oneOf": [
+              { "$ref": "#ipv4Address" },
+              { "$ref": "#ipv6Address" },
+              { "$ref": "#macAddress" }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "metadata": { "type": "object" },
+        "id": {
+          "description": "A unique identifier for identifying an individual host.",
+          "type": "number"
+        },
+        "seen_by": { "$ref": "#scanner" },
+        "services": {
+          "items": { "$ref": "#service" },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "type": {
+          "type": "string",
+          "enum": [ "host" ]
+        }
+      }
+    },
+    "hostname": {
+      "id": "hostname",
+      "type": "string",
+      "pattern": "^([a-zA-Z0-9-]{1,63}\.)*[a-zA-Z0-9-]{1,63}$"
+    },
+    "ipv4Address": {
+      "id": "ipv4Address",
+      "type": "object",
+      "properties": {
+        "address": {
+          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+          "type":"string"
+        },
+        "hostnames": {
+          "type":"array",
+          "items": { "$ref": "hostname" }
+        },
+        "type": {
+          "enum": [ "ipv4" ],
+          "type":"string"
+        }
+      }
+    },
+    "ipv6Address": {
+      "id": "ipv6Address",
+      "type": "object",
+      "properties": {
+        "address": {
+          "pattern": "^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?$",
+          "type":"string"
+        },
+        "hostnames": {
+          "type":"array",
+          "items": { "$ref": "hostname" }
+        },
+        "type": {
+          "enum": [ "ipv6" ],
+          "type":"string"
+        }
+      }
+    },
+    "macAddress": {
+      "id": "macAddress",
+      "type": "object",
+      "properties": {
+        "address": {
+          "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
+          "type":"string"
+        },
+        "type": {
+          "enum": [ "mac" ],
+          "type":"string"
+        }
+      }
+    },
+    "scanner": {
+      "id": "scanner",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "service": {
+      "id": "service",
+      "type": "object",
+      "properties": {
+      }
+    }
+  }
+}
