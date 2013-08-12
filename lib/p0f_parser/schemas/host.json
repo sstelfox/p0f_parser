@@ -1,12 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "host",
   "properties": {
     "addresses": {
       "items": {
         "oneOf": [
           {
-            "id": "ipv4Address",
             "properties": {
               "address": {
                 "format": "ip-address",
@@ -28,7 +26,6 @@
             "type": "object"
           },
           {
-            "id": "ipv6Address",
             "properties": {
               "address": {
                 "format": "ipv6",
@@ -50,7 +47,6 @@
             "type": "object"
           },
           {
-            "id": "macAddress",
             "properties": {
               "address": {
                 "pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$",
@@ -75,7 +71,6 @@
       "type": "number"
     },
     "seen_by": {
-      "id": "scanner",
       "properties": {
         "first_seen": {
           "format": "date-time",
@@ -96,7 +91,6 @@
     },
     "services": {
       "items": {
-        "id": "service",
         "properties": {
           "metadata": { "type": "object" },
           "port": { "type": "number" },
@@ -109,11 +103,9 @@
             "type": "array",
             "items": {
               "vulnerability": {
-                "id": "vulnerability",
                 "properties": {
                   "cve": { "type": "string" },
                   "cvss": {
-                    "id": "cvss",
                     "properties": {
                       "base_score": { "type": "number" },
                       "exploitability": { "type": "number" },
@@ -127,7 +119,7 @@
                   "exploitdb": { "type": "number" },
                   "metasploit_module": { "type": "string" }
                 },
-                "type": "object",
+                "type": "object"
               }
             }
           }
