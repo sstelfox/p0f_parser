@@ -14,6 +14,9 @@ addresses:
   - address: 11:22:33:44:55:66
     type: mac
 metadata:
+  os:
+    family: Linux
+    version: Linux 3.x
   trace:
     - host: gw.example.org
       ipaddr: 10.0.0.1

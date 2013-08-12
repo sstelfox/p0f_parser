@@ -30,6 +30,7 @@
         "required": [ "address", "type" ],
         "type": "object"
       },
+      "minimum": 1,
       "type": "array",
       "uniqueItems": true
     },
@@ -46,6 +47,7 @@
       "properties": {
         "items": {
           "description": "A record identifying an individual scanner that has seen this host and what sensor the service was running on.",
+          "minimum": 1,
           "properties": {
             "first_seen": {
               "description": "The first time this sensor/scanner combination saw this host",
@@ -74,9 +76,13 @@
       "type": "array"
     },
     "services": {
+      "description": "A list of services that have been detected running on this host",
       "items": {
         "properties": {
-          "metadata": { "type": "object" },
+          "metadata": {
+            "description": "Additional information provided by a scanner about this instance of this service that may not fall within the normal scope of a service record.",
+            "type": "object"
+          },
           "port": { "type": "number" },
           "protocol": { "type": "string" },
           "status": {
@@ -84,12 +90,18 @@
             "enum": [ "filtered", "open", "closed" ]
           },
           "vulnerabilities": {
+            "description": "The vulnerabilities that are known to exist for this service",
             "type": "array",
             "items": {
               "vulnerability": {
+                "description": "Information about a single detected vulnerability on a host",
                 "properties": {
-                  "cve": { "type": "string" },
+                  "cve": {
+                    "description": "The CVE identifier assigned to this vulnerability",
+                    "type": "string"
+                  },
                   "cvss": {
+                    "description": "When available, this provides the CVSS scores assigned to this vulnerability.",
                     "properties": {
                       "base_score": { "type": "number" },
                       "exploitability": { "type": "number" },
@@ -97,11 +109,27 @@
                       "link": { "type": "string", "format": "uri" },
                       "vectors": { "type": "string" }
                     },
-                    "type": "object",
-                    "required": [ "base_score", "exploitability", "impact", "link", "vectors" ]
+                    "required": [ "base_score", "exploitability", "impact", "link", "vectors" ],
+                    "type": "object"
                   },
-                  "exploitdb": { "type": "number" },
-                  "metasploit_module": { "type": "string" }
+                  "exploitdb": {
+                    "description": "The exploitDB vulnerability number if it's available",
+                    "type": "number"
+                  },
+                  "metadata": {
+                    "description": "Additional information about this vulnerability that may be made available to us from a scanner but does not fit into the standard record.",
+                    "type": "object"
+                  },
+                  "metasploit_module": {
+                    "description": "The name of the metasploit module known to exploit this vulnerability",
+                    "type": "string"
+                  },
+                  "status": {
+                    "default": "unverified",
+                    "description": "What the current status of this vulnerability is as far as we're concerned",
+                    "enum": [ "unverified", "false_positive", "verified", "ignored" ],
+                    "type": "string"
+                  }
                 },
                 "type": "object"
               }
@@ -115,10 +143,11 @@
       "uniqueItems": true
     },
     "type": {
+      "description": "This field indicates the type of record this is. Primarily needed when transferring scan data from a remote sensor to a collection hub.",
       "type": "string",
       "enum": [ "host" ]
     }
   },
-  "required": [ "id", "type" ],
+  "required": [ "addresses", "id", "seen_by", "type" ],
   "type": "object"
 }
