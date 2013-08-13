@@ -1,4 +1,5 @@
 
+require 'json'
 require 'open3'
 require 'strscan'
 
@@ -26,7 +27,7 @@ DATALINE = %r{
 }x
 
 class Parser
-  def next_entry(input)
+  def self.next_entry(input)
     # Scan till we get to the beginning of an entry
     return unless input.scan_until(/\.-\[/)
 
@@ -34,7 +35,7 @@ class Parser
     input.scan_until(/^`----$/)
   end
 
-  def process_entry(entry)
+  def self.process_entry(entry)
     lines = entry.lines
 
     data = process_header(lines.shift)
@@ -43,13 +44,13 @@ class Parser
     data
   end
 
-  def process_header(hline)
+  def self.process_header(hline)
     prehash = HEADER.names.zip(HEADER.match(hline).captures)
     prehash.keep_if { |i| ["source_ip", "source_port", "dest_ip", "dest_port", "rule"].include?(i[0]) }
     Hash[prehash]
   end
 
-  def extract_kvs(lines)
+  def self.extract_kvs(lines)
     data = lines.map do |l|
       next unless DATALINE =~ l
       DATALINE.match(l).captures
@@ -65,9 +66,27 @@ unless Process.uid == 0
   exit!(1)
 end
 
-ss = StringScanner.new(File.read('spec/fixtures/p0f.log'))
+Open3.popen3("p0f -i wlp3s0") do |stdin, stdout, stderr, wait_thr|
+  pid = wait_thr.pid
+  stdin.close # We don't need stdin for anything
 
-while e = next_entry(ss)
-  puts process_entry(e)
+  # Begin our loop
+  new_data = stdout.read_nonblock(1024) rescue ""
+  ss = StringScanner.new(new_data)
+
+  while !stdout.closed?
+    new_data = stdout.read_nonblock(1024) rescue ""
+    ss = StringScanner.new(ss.rest + new_data)
+
+    while e = Parser.next_entry(ss)
+      puts JSON.generate(Parser.process_entry(e))
+    end
+  end
+
+  stderr.close unless stderr.closed?
+  stdout.close unless stdout.closed?
+  
+  # Prevent zombie processes even if we don't use this
+  exit_status = wait_thr.value
 end
 
