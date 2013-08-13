@@ -71,16 +71,21 @@ Open3.popen3("p0f -i wlp3s0") do |stdin, stdout, stderr, wait_thr|
   stdin.close # We don't need stdin for anything
 
   # Begin our loop
-  new_data = stdout.read_nonblock(1024) rescue ""
+  new_data = stdout.read_nonblock(2048) rescue ""
   ss = StringScanner.new(new_data)
 
   while !stdout.closed?
-    new_data = stdout.read_nonblock(1024) rescue ""
+    new_data = stdout.read_nonblock(2048) rescue ""
     ss = StringScanner.new(ss.rest + new_data)
 
     while e = Parser.next_entry(ss)
       puts JSON.generate(Parser.process_entry(e))
     end
+
+    # Block for up too 20 seconds or until new information is available, the 20
+    # second timeout is arbitrary as we don't actually need to do anything until
+    # new information is available.
+    IO.select([stdout], nil, nil, 20)
   end
 
   stderr.close unless stderr.closed?
