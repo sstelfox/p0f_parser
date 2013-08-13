@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+base_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+$:.push(base_path) unless $:.include?(base_path)
+
+require 'p0f_parser'
+
+unless Process.uid == 0
+  STDERR.puts "WARNING: You probably won't see any results unless you run this as root."
+end
+
+stdin, stdout, stderr, wait_thr = Open3.popen3("p0f -i wlp3s0")
+
+pid = wait_thr.pid # Wait until we have a PID for our subprocess
+stdin.close unless stdin.closed? # We don't need stdin for anything
+
+# Setup a signal handler 
+trap('INT') do
+  # Kill our children
+  Process.kill('INT', 0)
+  exit 0
+end
+
+parsr = P0fParser::Parser.new
+
+# Begin our loop
+while !stdout.closed?
+  # Block for up too 30 seconds or until new information is available, the 30
+  # second timeout is arbitrary as we don't actually need to do anything until
+  # new information is available.
+  if IO.select([stdout], nil, nil, 30)
+    new_data = stdout.read_nonblock(2048) rescue ""
+    parsr.add_data(new_data)
+
+    while e = parsr.next_entry
+      puts JSON.generate(e)
+    end
+  end
+end
+
+stderr.close unless stderr.closed?
+stdout.close unless stdout.closed?
+
+# Even if we don't care about the exit status, we should collect this too
+# prevent zombie processes.
+wait_thr.value
+
