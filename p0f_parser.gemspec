@@ -6,6 +6,7 @@ require 'p0f_parser/version'
 Gem::Specification.new do |gem|
   gem.name          = "p0f_parser"
   gem.version       = P0fParser::VERSION
+  gem.license       = "LGPL"
   gem.authors       = ["Sam Stelfox"]
   gem.email         = ["sstelfox+gems@bedroomprogrammers.net"]
   gem.description   = %q{Parse the log output of the p0f tool into a more easy to consume JSON format.}
