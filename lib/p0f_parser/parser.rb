@@ -7,7 +7,7 @@ module P0fParser
       # We create a new scanner with any data we haven't processed yet to
       # prevent ballooning our memory with all the prior data we no longer
       # need.
-      @scanner = StringScanner.new(@scanner.rest + new_data)
+      @scanner.string = (@scanner.rest + new_data)
     end
 
     def initialize
