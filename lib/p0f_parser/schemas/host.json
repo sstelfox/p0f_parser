@@ -112,6 +112,10 @@
                     "required": [ "base_score", "exploitability", "impact", "link", "vectors" ],
                     "type": "object"
                   },
+                  "cwe": {
+                    "description": "The common weakness enumeration specification identifier, used for classifying vulnerabilities into categories.",
+                    "type": "string"
+                  },
                   "exploitdb": {
                     "description": "The exploitDB vulnerability number if it's available",
                     "type": "number"
